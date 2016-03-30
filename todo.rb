@@ -1,4 +1,5 @@
 module Menu
+	
 	def menu
 		" Welcome to the Todolist Program!
 		This menu will help you use the Task List System
@@ -8,20 +9,24 @@ module Menu
 		4) Delete
 		5) Write to a File
 		6) Read from a File
+		7) Toggle Status
 		Q) Quit "
 	end
 
 	def show
 		menu
 	end
+
 end
 
 module Promptable
+	
 	def prompt(message = "What would you like to do?", symbol = ':> ')
 		print message
 		print symbol
 		gets.chomp
 	end
+
 end
 
 class List
@@ -48,28 +53,54 @@ class List
 	end
 
 	def write_to_file(filename)
-		IO.write(filename, @all_tasks.map(&:to_s).join("\n"))
+		machinified = @all_tasks.map(&:to_machine).join("\n")
+		IO.write(filename, machinified)
 	end
 
 	def read_from_file(filename)
 		IO.readlines(filename).each do |line|
-			add(Task.new(line.chomp))
+			status, *description = line.split(':')
+			status = status.downcase.include?('X')
+			add(Task.new(description.join(':').strip, status))
 		end
 	end
+
+	def toggle(task_number)
+		all_tasks[task_number - 1].toggle_status
+	end
+
 end
 
 class Task
 	attr_reader :description
+	attr_accessor :status
 
-	def initialize(description)
+	def initialize(description, status = false)
 		@description = description
+		@status = status
 	end
 
 	def to_s
-		description
+		"#{represent_status} : #{description}"
 	end
 
-	
+	def completed?
+		status
+	end
+
+	def toggle_status
+		@completed_status = !completed?
+	end
+
+	def to_machine
+		"#{represent_status}:#{description}"
+	end
+
+	private
+	def represent_status
+		"#{completed? ? '[X]' : '[ ]'}"
+	end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -96,6 +127,9 @@ if __FILE__ == $PROGRAM_NAME
 					rescue Errno::ENOENT
 						puts 'File name not found, please verify your file name and path.'
 					end
+				when '7'
+					puts my_list.show
+					my_list.toggle(prompt('Which would you like to toggle the status for?').to_i)
 				else
 					puts 'Try again, I did not understand.'
 			end
