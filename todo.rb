@@ -4,8 +4,9 @@ module Menu
 		This menu will help you use the Task List System
 		1) Add
 		2) Show
-		3) Write to a File
-		4) Read from a File
+		3) Delete
+		4) Write to a File
+		5) Read from a File
 		Q) Quit "
 	end
 
@@ -15,7 +16,7 @@ module Menu
 end
 
 module Promptable
-	def prompt(message = 'What would you like to do?', symbol = ':> ')
+	def prompt(message = "What would you like to do?", symbol = ':> ')
 		print message
 		print symbol
 		gets.chomp
@@ -33,9 +34,15 @@ class List
 		all_tasks << task
 	end
 
+	def delete(task_number) 
+    	all_tasks.delete_at(task_number - 1) 
+    end
+
 	def show
-		all_tasks
+		all_tasks.map.with_index { |l, i| "(#{i.next}): #{l}"}
 	end
+
+	
 
 	def write_to_file(filename)
 		IO.write(filename, @all_tasks.map(&:to_s).join("\n"))
@@ -74,8 +81,11 @@ if __FILE__ == $PROGRAM_NAME
 				when '2'
 					puts my_list.show
 				when '3'
-					my_list.write_to_file(prompt('What is the filename to write to?'))
+					puts my_list.show
+					my_list.delete(prompt('Which task to delete?').to_i) 
 				when '4'
+					my_list.write_to_file(prompt('What is the filename to write to?'))
+				when '5'
 					begin
 						my_list.read_from_file(prompt('What is the filename to read from?'))
 					rescue Errno::ENOENT
