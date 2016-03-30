@@ -4,9 +4,10 @@ module Menu
 		This menu will help you use the Task List System
 		1) Add
 		2) Show
-		3) Delete
-		4) Write to a File
-		5) Read from a File
+		3) Update
+		4) Delete
+		5) Write to a File
+		6) Read from a File
 		Q) Quit "
 	end
 
@@ -38,11 +39,13 @@ class List
     	all_tasks.delete_at(task_number - 1) 
     end
 
+    def update(task_number, task)
+    	all_tasks[task_number - 1] = task
+    end
+
 	def show
 		all_tasks.map.with_index { |l, i| "(#{i.next}): #{l}"}
 	end
-
-	
 
 	def write_to_file(filename)
 		IO.write(filename, @all_tasks.map(&:to_s).join("\n"))
@@ -81,11 +84,13 @@ if __FILE__ == $PROGRAM_NAME
 				when '2'
 					puts my_list.show
 				when '3'
+					my_list.update(prompt('Which task to update?').to_i, Task.new(prompt('Task description?')))
+				when '4'
 					puts my_list.show
 					my_list.delete(prompt('Which task to delete?').to_i) 
-				when '4'
-					my_list.write_to_file(prompt('What is the filename to write to?'))
 				when '5'
+					my_list.write_to_file(prompt('What is the filename to write to?'))
+				when '6'
 					begin
 						my_list.read_from_file(prompt('What is the filename to read from?'))
 					rescue Errno::ENOENT
