@@ -1,2 +1,2 @@
 # todo-list
-Creating little application for 'to do' list
+Creating a little application for 'to do' list
