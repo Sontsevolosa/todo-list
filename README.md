@@ -1,5 +1,5 @@
 # Todo List
-Creating the Todo List program - an object oriented program that uses Ruby classes, modules, methods and some of the core features of the Ruby language.
+Creating a Todo List program - an object oriented program that uses Ruby classes, modules, methods and some of the core features of the Ruby language.
 <br/><br/>
 Program includes:
 - creating a list;
