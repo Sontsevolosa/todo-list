@@ -5,7 +5,7 @@ Program includes:
 - creating a list;
 - adding a task to the list;
 - review all tasks in the list;
-- writing a list to a file;
+- writing a list to the file;
 - reading a list from the file;
 - deleting a task from a list;
 - updating a task in a list;
